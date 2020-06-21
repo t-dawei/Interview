@@ -1,0 +1,50 @@
+                平均时间复杂度       最坏        最好          空间复杂度       稳定性
+选择排序            o(n^2)          o(n^2)      o(n^2)          o(1)          不稳定
+插入排序            o(n^2)          o(n^2)      o(n)            o(1)          稳定
+快速排序            o(nlogn)        o(n^2)      o(nlogn)        o(logn)       不稳定
+归并排序            o(nlogn)        o(nlogn)    o(nlogn)        o(n)          稳定
+堆排序              o(nlogn)        o(nlogn)    o(nlogn)        o(1)          不稳定
+冒泡排序            n(n^2)          n(n^2)      o(n)            o(1)          稳定
+
+堆排序（Heap Sort）
+堆是一棵具有以下性质的完全二叉树：
+大顶堆：每个结点的值都大于或等于其左右孩子结点的值
+小顶堆：每个结点的值都小于或等于其左右孩子结点的值
+堆排序的主要思想：
+将待排序列构造成一个大顶堆，此时堆顶元素就是整个序列的最大值，将堆顶元素与堆数组的末尾元素进行交换。然后将剩余的n-1个元素重新构造成一个堆，并得到整个序列的次大值。如此反复执行，得到一个有序的序列。
+复杂度分析
+时间复杂度：最好、最坏、平均都是O(nlogn)
+空间复杂度：O(1)
+不稳定
+不适合待排序列个数较少的情况
+
+def heap_adjust(array, start, end):
+    temp = array[start]
+    child = 2 * start
+    while child <= end:
+        if child < end and array[child] < array[child + 1]:
+            child += 1
+        if temp >= array[child]:
+            break
+        array[start] = array[child]
+        start = child
+        child *= 2
+    array[start] = temp
+
+
+def heap_sort(array):
+    # 从最后一个有孩子结点的结点开始调整最大堆
+    first = len(array) // 2 - 1
+    for start in range(first, -1, -1):
+        heap_adjust(array, start, len(array) - 1)
+
+    # 将最大的数放到堆的最后一个位置，并继续调整排序
+    for end in range(len(array) - 1, 0, -1):
+        array[0], array[end] = array[end], array[0]
+        heap_adjust(array, 0, end - 1)
+
+
+if __name__ == "__main__":
+    array = [1, 4, 5, 0, 2, 7, 9, 10, 3, 6]
+    heap_sort(array)
+    print(array)

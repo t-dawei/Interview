@@ -1,0 +1,64 @@
+# 单例模式
+class user():
+    # 保存类实例
+    __instance = None
+
+    # 初始化函数
+    def __init__(self, name):
+        self.name = name
+
+    # 类创建函数 cls 表示当前类
+    def __new__(cls, name):
+        if not cls.__instance:
+            cls.__instance = super().__new__(cls)
+        return cls.__instance
+
+
+# 工程模式
+# 解耦 定义类或方法，让其功能越单一越好
+
+‘’‘定义蛋糕的口味’‘’
+class AppleCake(object):
+    def __init__(self,weidao="苹果"):
+        self.taste = weidao
+
+class OrangeCake(object):
+    def __init__(self,weidao="橘子"):
+        self.taste = weidao
+
+# cakeStore 直接调用了 appleCake 的类名字 当类名变化时， cakesore代码也要更改
+# 获取蛋糕类实例 
+class CakeStore(object):
+    def taste(self,weidao):
+        if weidao == "苹果":
+            cake = AppleCake()
+            print("------味道%s------"%cake.taste)
+        elif weidao == "橘子":
+            cake = OrangeCake()
+            print("---------味道%s------"%cake.taste)
+
+CakeStore().taste('梨')
+
+# 工厂类
+class CakeFactory():
+    # 生产各种个样的蛋糕 添加代码
+    def CreateCake(self,weidao):
+        if weidao == "苹果":
+            cake = AppleCake()
+        elif weidao == "橘子":
+            cake = OrangeCake()
+        return cake
+
+
+# 通过调用工厂类中的 CreateCake 调用函数 这样AppleCake 类名变化时，只需更改工厂类
+# 通过工厂类获取蛋糕类实例
+class CakeStore(object):
+    # 获取工厂类 
+    def __init__(self):
+        self.factory = CakeFactory()
+
+    def taste(self,weidao):
+        cake = self.factory.CreateCake(weidao)
+        print("-----品尝味道：%s-----"%cake.taste)
+
+
